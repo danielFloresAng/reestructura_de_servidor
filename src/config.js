@@ -4,18 +4,19 @@ import dotenv from "dotenv";
 
 const program = new Command();
 
-program.option("--node <mode>").option("--port <port>");
+program.option("--mode <mode>").option("--port <port>");
 
 program.parse();
 
 const programOpts = program.opts();
-dotenv.config();
-// console.log(process.env.PORT);
-
+// dotenv.config();
+dotenv.config({
+  path: programOpts.mode === ".env.prod" ? ".env.prod" : ".env.devel",
+});
 
 const config = {
-  PORT: process.env.PORT || programOpts.port || 8000,
-  SERVER: "Local",
+  PORT: programOpts.port || 8000,
+  SERVER: 'Local',
   DIRNAME: url.fileURLToPath(new URL(".", import.meta.url)),
   get UPLOAD_DIR() {
     return `${this.DIRNAME}/public/img`;
